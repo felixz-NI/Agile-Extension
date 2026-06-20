@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body>
+<!-- Sandboxed page: MV3 sandboxed extension pages are exempt from the
+     extension CSP, so the OpenCascade (occt-import-js) WASM loader's use of
+     new Function()/eval (Emscripten embind) is permitted here. The preview
+     iframe (content-iframe.js) embeds this page and postMessages CAD bytes +
+     the wasm bytes; we tessellate and post the triangle mesh back. -->
+<script src="occt-import-js.js"></script>
+<script src="occt-sandbox.js"></script>
+</body>
+</html>

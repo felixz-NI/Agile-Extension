@@ -1,0 +1,109 @@
+{
+  "manifest_version": 3,
+  "name": "Agile PLM Inline Preview",
+  "version": "5.1",
+  "description": "Inline PDF, DOCX, and Markdown preview sidebar on Agile PLM.",
+  "minimum_chrome_version": "110",
+  "permissions": [
+    "declarativeNetRequest",
+    "storage",
+    "webRequest",
+    "nativeMessaging"
+  ],
+  "host_permissions": [
+    "*://agilesvc1.natinst.com/*",
+    "*://agile.natinst.com/*",
+    "*://echo.natinst.com/*",
+    "*://apex.natinst.com/*",
+    "*://p4.natinst.com/*",
+    "*://agiledatasheets.natinst.com/*",
+    "*://dev.azure.com/*",
+    "*://*.visualstudio.com/*",
+    "*://*.okta.com/*"
+  ],
+  "icons": {
+    "128": "icons/icon.svg"
+  },
+  "action": {
+    "default_icon": "icons/icon.svg",
+    "default_title": "Agile PLM Inline Preview \u2014 settings",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "sw.js"
+  },
+  "sandbox": {
+    "pages": ["occt-sandbox.html"]
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'",
+    "sandbox": "sandbox allow-scripts; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval'; object-src 'self'"
+  },
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "agile_ruleset",
+        "enabled": true,
+        "path": "rules.json"
+      }
+    ]
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://agile.natinst.com/*"],
+      "js": ["page-hooks.js"],
+      "run_at": "document_start",
+      "all_frames": false,
+      "world": "MAIN"
+    },
+    {
+      "matches": ["*://agile.natinst.com/*"],
+      "js": ["page-iframe-hooks.js"],
+      "run_at": "document_start",
+      "all_frames": true,
+      "world": "MAIN"
+    },
+    {
+      "matches": ["*://agile.natinst.com/*"],
+      "js": ["browser-shim.js", "content-main.js"],
+      "run_at": "document_idle",
+      "all_frames": false
+    },
+    {
+      "matches": ["*://agile.natinst.com/*"],
+      "js": ["browser-shim.js", "content-iframe.js"],
+      "run_at": "document_start",
+      "all_frames": true
+    },
+    {
+      "matches": ["*://echo.natinst.com/*"],
+      "js": ["browser-shim.js", "content-echo.js"],
+      "run_at": "document_idle",
+      "all_frames": true
+    },
+    {
+      "matches": ["*://apex.natinst.com/*"],
+      "js": ["browser-shim.js", "content-mvdb.js"],
+      "run_at": "document_idle",
+      "all_frames": true
+    },
+    {
+      "matches": ["*://dev.azure.com/*"],
+      "js": ["browser-shim.js", "content-azure.js"],
+      "run_at": "document_idle",
+      "all_frames": true
+    },
+    {
+      "matches": ["*://p4.natinst.com/browser/*"],
+      "js": ["browser-shim.js", "content-p4diff.js"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["docs/*.pdf", "occt-import-js.wasm", "occt-sandbox.html", "occt-import-js.js"],
+      "matches": ["*://agile.natinst.com/*"]
+    }
+  ]
+}

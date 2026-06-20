@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>p4v:// protocol test</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 720px; margin: 40px auto; }
+    input, button { font-size: 16px; padding: 6px 10px; }
+    input { width: 100%; box-sizing: border-box; margin-bottom: 8px; }
+    a { display: inline-block; margin-top: 12px; }
+    code { background: #f0f0f0; padding: 1px 5px; border-radius: 3px; word-break: break-all; }
+  </style>
+</head>
+<body>
+  <h1>Open in P4V</h1>
+
+  <!-- Static link example -->
+  <p>Static link:
+    <a href="p4v://tree/%2F%2FManufacturing%2FBN%2FProducts%2FHTAP_RF%2FProducts%2FVST%2FPXIe-5655%2FModule%2FPXIe-5655_StationCal%2FSandbox%2Fexport%2F2.0.0%2F2.0.0f009">open sample depot path</a>
+  </p>
+
+  <!-- Build from a depot path you paste in -->
+  <p>
+    <input id="path" type="text"
+           value="//Manufacturing/BN/Products/HTAP_RF/Products/VST/PXIe-5655/Module/PXIe-5655_StationCal/Sandbox/export/2.0.0/2.0.0f009" />
+    <button id="go">Open in P4V</button>
+  </p>
+
+  <p>This triggers <code>p4v://tree/&lt;url-encoded depot path&gt;</code>.</p>
+
+  <script>
+    function openInP4V(depotPath) {
+      // encodeURIComponent keeps the leading // and all slashes safe.
+      // The handler URL-decodes it back to //Manufacturing/...
+      const url = "p4v://tree/" + encodeURIComponent(depotPath);
+      window.location.href = url;
+    }
+
+    document.getElementById("go").addEventListener("click", () => {
+      const p = document.getElementById("path").value.trim();
+      if (p) openInP4V(p);
+    });
+  </script>
+</body>
+</html>

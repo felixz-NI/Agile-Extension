@@ -1,0 +1,82 @@
+{
+  "manifest_version": 2,
+  "name": "Agile PLM Inline Preview",
+  "version": "5.1",
+  "description": "Inline PDF, DOCX, and Markdown preview sidebar on Agile PLM.",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "agile-inline-preview@natinst.local",
+      "strict_min_version": "115.0",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    }
+  },
+  "permissions": [
+    "webRequest",
+    "webRequestBlocking",
+    "storage",
+    "nativeMessaging",
+    "*://agilesvc1.natinst.com/*",
+    "*://agile.natinst.com/*",
+    "*://echo.natinst.com/*",
+    "*://apex.natinst.com/*",
+    "*://*.okta.com/*",
+    "*://agiledatasheets.natinst.com/*",
+    "*://p4.natinst.com/*",
+    "*://dev.azure.com/*",
+    "*://*.dev.azure.com/*",
+    "*://*.visualstudio.com/*"
+  ],
+  "icons": {
+    "128": "icons/icon.svg"
+  },
+  "browser_action": {
+    "default_icon": "icons/icon.svg",
+    "default_title": "Agile PLM Inline Preview \u2014 settings",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "scripts": ["mammoth.browser.min.js", "jszip.min.js", "occt-import-js.js", "background.js"]
+  },
+  "content_security_policy": "script-src 'self' 'wasm-unsafe-eval' 'unsafe-eval'; object-src 'self'",
+  "content_scripts": [
+    {
+      "matches": ["*://agile.natinst.com/*"],
+      "js": ["content-main.js"],
+      "run_at": "document_idle",
+      "all_frames": false
+    },
+    {
+      "matches": ["*://agile.natinst.com/*"],
+      "js": ["content-iframe.js"],
+      "run_at": "document_start",
+      "all_frames": true
+    },
+    {
+      "matches": ["*://echo.natinst.com/*"],
+      "js": ["content-echo.js"],
+      "run_at": "document_idle",
+      "all_frames": true
+    },
+    {
+      "matches": ["*://apex.natinst.com/*"],
+      "js": ["content-mvdb.js"],
+      "run_at": "document_idle",
+      "all_frames": true
+    },
+    {
+      "matches": ["*://dev.azure.com/*"],
+      "js": ["content-azure.js"],
+      "run_at": "document_idle",
+      "all_frames": true
+    },
+    {
+      "matches": ["*://p4.natinst.com/browser/*"],
+      "js": ["content-p4diff.js"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "web_accessible_resources": ["docs/*.pdf", "occt-import-js.wasm"]
+}

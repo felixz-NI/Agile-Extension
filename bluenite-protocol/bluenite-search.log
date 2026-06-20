@@ -1,0 +1,17 @@
+==== bluenite handler run 06/19/2026 16:08:41 ====
+16:08:41.163  URL='bluenite://search/135491E-02L?tab=Products'  term='135491E-02L'  tab='Products'  uiaAvailable=True
+16:08:43.164  Production check: marker 'bnProd.bncfg' not found in 48 text controls (Production not open).
+16:08:43.165  Production already open: False (launched=True, alwaysOpen=False).
+16:08:43.288  startup-login: login dialog detected; waiting for manual sign-in.
+16:08:47.007  startup-login: manual login closed=True.
+16:08:50.097  Post-login foreground confirmed=True before Ctrl+P.
+16:08:50.565  Foreground confirmed=True immediately before Ctrl+P.
+16:08:50.566  Sending Open Production hotkey '^p'.
+16:09:05.970  production-login: no login dialog appeared within 15 s.
+16:09:05.979  Opening dialog: detected; waiting for it to close.
+16:09:09.125  Opening dialog: closed (Production loaded).
+16:09:09.782  Tab: selected 'Products'.
+16:09:10.051  Search: found 56 edit controls.
+16:09:10.054  Search: matched by AutomationId 'txtTextBox'.
+16:09:10.691  Search: typing term '135491E-02L'.
+16:09:11.491  Search: pressed ENTER. Done.

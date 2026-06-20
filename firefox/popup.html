@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agile Preview settings</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --fg: #1f2933;
+      --muted: #6b7785;
+      --border: #e2e6ea;
+      --accent: #03A378;
+      --hover: #f5f7f9;
+      --btn-bg: #f5f7f9;
+      --btn-hover: #eaeef1;
+      --slider-off: #c5ccd3;
+    }
+    :root[data-theme="dark"] {
+      --bg: #141414;
+      --fg: #c8c8c8;
+      --muted: #8a939b;
+      --border: #2f343b;
+      --accent: #03A378;
+      --hover: #2a2f35;
+      --btn-bg: #2a2f35;
+      --btn-hover: #333a42;
+      --slider-off: #4a545d;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      width: 280px;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 13px;
+      color: var(--fg);
+      background: var(--bg);
+    }
+    header {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    header p {
+      margin: 4px 0 0;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .list { padding: 6px 0; }
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 14px;
+    }
+    .row:hover { background: var(--hover); }
+    .label { display: flex; flex-direction: column; }
+    .label .name { font-weight: 500; }
+    .label .desc { font-size: 11px; color: var(--muted); }
+    /* Toggle switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 36px;
+      height: 20px;
+      flex: 0 0 auto;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background: var(--slider-off);
+      border-radius: 20px;
+      transition: background 0.15s ease;
+    }
+    .slider::before {
+      content: "";
+      position: absolute;
+      height: 16px;
+      width: 16px;
+      left: 2px;
+      top: 2px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.15s ease;
+    }
+    input:checked + .slider { background: var(--accent); }
+    input:checked + .slider::before { transform: translateX(16px); }
+    footer {
+      display: flex;
+      gap: 8px;
+      padding: 10px 14px;
+      border-top: 1px solid var(--border);
+    }
+    button {
+      flex: 1;
+      padding: 6px 8px;
+      font-size: 12px;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      background: var(--btn-bg);
+      color: var(--fg);
+      cursor: pointer;
+    }
+    button:hover { background: var(--btn-hover); }
+    /* Appearance segmented control */
+    .appearance {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .appearance .name { font-weight: 500; }
+    .seg {
+      display: inline-flex;
+      background: var(--btn-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2px;
+      gap: 2px;
+    }
+    .seg button {
+      flex: 0 0 auto;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+    .seg button:hover { background: var(--btn-hover); }
+    .seg button.active {
+      background: var(--accent);
+      color: #fff;
+    }
+    /* HWT endpoint config */
+    .hwt-config {
+      padding: 10px 14px;
+      border-top: 1px solid var(--border);
+    }
+    .hwt-config .name { font-weight: 500; display: block; margin-bottom: 2px; }
+    .hwt-config .hint {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.35;
+      margin: 0 0 8px;
+    }
+    .hwt-config .field { margin-bottom: 8px; }
+    .hwt-config label.flbl {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+    .hwt-config input[type="text"] {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 6px 8px;
+      font-size: 12px;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      background: var(--btn-bg);
+      color: var(--fg);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Inline Preview buttons</h1>
+    <p>Toggle which buttons appear on Agile pages.</p>
+  </header>
+  <div class="appearance">
+    <span class="name">Appearance</span>
+    <div class="seg" id="themeSeg">
+      <button type="button" data-mode="auto">Auto</button>
+      <button type="button" data-mode="light">Light</button>
+      <button type="button" data-mode="dark">Dark</button>
+    </div>
+  </div>
+  <div class="list" id="list"></div>
+  <div class="hwt-config">
+    <span class="name">HWT Config Creator URLs</span>
+    <p class="hint">Local always works and auto-starts the server. Set Network / External only if you open the viewer running on another machine &mdash; paste the URLs the <code>hwt-config-creator</code> terminal prints. Leave blank to hide them.</p>
+    <div class="field">
+      <label class="flbl" for="hwtNetwork">Network URL</label>
+      <input type="text" id="hwtNetwork" placeholder="http://10.2.168.20:8501/mfg-debug-config-create" />
+    </div>
+    <div class="field">
+      <label class="flbl" for="hwtExternal">External URL</label>
+      <input type="text" id="hwtExternal" placeholder="http://69.41.68.4:8501/mfg-debug-config-create" />
+    </div>
+  </div>
+  <footer>
+    <button id="enableAll" type="button">Enable all</button>
+    <button id="disableAll" type="button">Disable all</button>
+  </footer>
+  <script src="popup.js"></script>
+</body>
+</html>

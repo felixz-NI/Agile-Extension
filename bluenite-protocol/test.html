@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>bluenite:// protocol test</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 640px; margin: 40px auto; }
+    input, button { font-size: 16px; padding: 6px 10px; }
+    a { display: inline-block; margin-top: 12px; }
+    code { background: #f0f0f0; padding: 1px 5px; border-radius: 3px; }
+  </style>
+</head>
+<body>
+  <h1>Search BlueNITE</h1>
+
+  <!-- 1. Plain link form -->
+  <p>Static link: <a href="bluenite://search/widget123">bluenite://search/widget123</a></p>
+
+  <!-- 2. Build from an input box -->
+  <p>
+    <input id="term" type="text" placeholder="type a search term" value="hello world" />
+    <button id="go">Open in BlueNITE</button>
+  </p>
+
+  <p>This will trigger <code>bluenite://search/&lt;your%20term&gt;</code>.</p>
+
+  <script>
+    function openInBlueNITE(term) {
+      // encodeURIComponent makes spaces/symbols safe in the URL.
+      // The handler URL-decodes it back to the original text.
+      const url = "bluenite://search/" + encodeURIComponent(term);
+      // Setting location.href triggers the protocol. The OS prompts the
+      // first time asking which app to open. window.open also works.
+      window.location.href = url;
+    }
+
+    document.getElementById("go").addEventListener("click", () => {
+      const term = document.getElementById("term").value.trim();
+      if (term) openInBlueNITE(term);
+    });
+  </script>
+</body>
+</html>
