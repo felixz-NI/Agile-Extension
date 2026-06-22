@@ -1,11 +1,11 @@
-# GitHub Repo Template
+# Agile Extension
 
-GitHub Repo Template is a template for creation of open source projects made
-available on GitHub. It includes a permissive open source license, a developer
-certificate of origin, and a pull request template. This provides everything
-necessary to have a properly licensed open source project.
 
-## Using GitHub Repo Template
+## Install Commands:
+Open terminal in directory
+powershell -NoProfile -ExecutionPolicy Bypass -File ".\hwt-protocol\register.ps1"
+powershell -NoProfile -ExecutionPolicy Bypass -File ".\blueNite-protocol\register.ps1"
+powershell -NoProfile -ExecutionPolicy Bypass -File ".\p4v-protocol\register.ps1"
 
 1. Clone or download this repository.
 2. Copy its contents into your project (including the hidden .github directory). 
