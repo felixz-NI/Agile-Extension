@@ -1,15 +1,27 @@
-# GitHub Repo Template
+# Agile Extension
 
-GitHub Repo Template is a template for creation of open source projects made
-available on GitHub. It includes a permissive open source license, a developer
-certificate of origin, and a pull request template. This provides everything
-necessary to have a properly licensed open source project.
+# Install Extension
+- download file as zip and extract to a local folder
+## Chrome & Edge 
+- go to extensions settings (chrome://extensions  or edge://extensions)
+- enable developer mode
+- select load unpacked
+- select & open chrome/edge folder.
+## Firefox
+- Go to about:preferences
+- Scroll down to Applications under General.
+- Ensure Action is Open in Firefox for Portable Document Format(PDF)
+- Go to about:debugging#/runtime/this-firefox
+- select Load Temporary Add-On
+- Select and open manifest.json file in the agile extension firefox folder
 
-## Using GitHub Repo Template
-
-1. Clone or download this repository.
-2. Copy its contents into your project (including the hidden .github directory). 
-3. Customize each file to suit your project's needs (including the README). Look through the files for "TODO" and \<reponame\>, and replace with content appropriate to your project.
-4. (Optional) Check out [GitHub Template Guidelines](https://github.com/cezaraugusto/github-template-guidelines) for ideas about how to customize your project.
-
-TODO: describe a project in detail, what it does, how to use it, etc.
+# BlueNite\HWT Data Viewer\p4v protocols
+## Install
+- Open terminal in directory where agile extension is installed.
+- powershell -NoProfile -ExecutionPolicy Bypass -File ".\hwt-protocol\register.ps1"
+- powershell -NoProfile -ExecutionPolicy Bypass -File ".\bluenite-protocol\register.ps1"
+- powershell -NoProfile -ExecutionPolicy Bypass -File ".\p4v-protocol\register.ps1"
+## Uninstall
+- powershell -NoProfile -ExecutionPolicy Bypass -File ".\bluenite-protocol\unregister.ps1"
+- powershell -NoProfile -ExecutionPolicy Bypass -File ".\p4v-protocol\unregister.ps1"
+- powershell -NoProfile -ExecutionPolicy Bypass -File ".\hwt-protocol\unregister.ps1"
