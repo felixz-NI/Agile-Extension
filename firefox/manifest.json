@@ -26,7 +26,11 @@
     "*://p4.natinst.com/*",
     "*://dev.azure.com/*",
     "*://*.dev.azure.com/*",
-    "*://*.visualstudio.com/*"
+    "*://*.visualstudio.com/*",
+    "*://login.microsoftonline.com/*",
+    "*://*.microsoftonline.com/*",
+    "*://login.live.com/*",
+    "*://login.windows.net/*"
   ],
   "icons": {
     "128": "icons/icon.svg"

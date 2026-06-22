@@ -1536,8 +1536,17 @@ browser.webRequest.onHeadersReceived.addListener(
 // ECHO and MVDB (APEX) are live web apps that refuse to be framed via
 // X-Frame-Options and/or a CSP frame-ancestors directive. Strip both for our
 // preview iframe so the ECHO BOM page and MVDB report can load in the panel.
-// Azure DevOps (dev.azure.com) does the same; strip it too so the work-item
-// search can render in the preview sidebar.
+// Azure DevOps (dev.azure.com / *.visualstudio.com) does the same; strip it too
+// so an ALREADY-AUTHENTICATED work-item search renders in the sidebar.
+//
+// NOTE: we do NOT strip headers from the Microsoft identity platform
+// (login.microsoftonline.com etc.). Microsoft's interactive sign-in page cannot
+// be embedded in an iframe at all — it sends X-Frame-Options: deny AND uses
+// client-side frame-busting, by design, to prevent credential phishing. Header
+// stripping can't defeat that. Instead the detector listener below catches the
+// login redirect and tells the content script to show its "Sign in (new tab)"
+// note: the user signs in once in a real tab, then reloads the sidebar, which
+// now loads dev.azure.com results directly without bouncing to login.
 browser.webRequest.onHeadersReceived.addListener(
   function (details) {
     if (details.type !== 'sub_frame') return;
@@ -1559,15 +1568,26 @@ browser.webRequest.onHeadersReceived.addListener(
     });
     return { responseHeaders: filtered };
   },
-  { urls: ["*://echo.natinst.com/*", "*://apex.natinst.com/*", "*://dev.azure.com/*"] },
+  {
+    urls: [
+      "*://echo.natinst.com/*",
+      "*://apex.natinst.com/*",
+      "*://dev.azure.com/*",
+      "*://*.dev.azure.com/*",
+      "*://*.visualstudio.com/*"
+    ]
+  },
   ["blocking", "responseHeaders"]
 );
 
 // Detect when a preview sub-frame is REFUSED embedding by SSO/login pages
-// (e.g. emerson.okta.com sends X-Frame-Options: DENY / CSP frame-ancestors).
-// We don't strip those (signing in inside a frame is unsafe/blocked), but we
-// notify the page so it can reveal the "sign in to cache your session" note —
-// shown ONLY when this framing block actually happens.
+// (emerson.okta.com, and the Microsoft identity platform that Azure DevOps
+// redirects to: login.microsoftonline.com / login.live.com / login.windows.net,
+// all of which send X-Frame-Options: DENY / CSP frame-ancestors and cannot be
+// embedded). We can't strip our way past those, so we notify the content script
+// to reveal the "Sign in (new tab)" note — shown ONLY when a framing block
+// actually happens. The user signs in once in a real tab; reloading the sidebar
+// afterward loads dev.azure.com directly (no login bounce), so it renders.
 browser.webRequest.onHeadersReceived.addListener(
   function (details) {
     if (details.type !== 'sub_frame') return;
@@ -1590,7 +1610,15 @@ browser.webRequest.onHeadersReceived.addListener(
         .catch(function () { /* tab may not have a content script; ignore */ });
     }
   },
-  { urls: ["*://*.okta.com/*", "*://*.visualstudio.com/*"] },
+  {
+    urls: [
+      "*://*.okta.com/*",
+      "*://login.microsoftonline.com/*",
+      "*://*.microsoftonline.com/*",
+      "*://login.live.com/*",
+      "*://login.windows.net/*"
+    ]
+  },
   ["responseHeaders"]
 );
 

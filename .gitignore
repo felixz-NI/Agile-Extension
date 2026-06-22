@@ -1,0 +1,14 @@
+# Local/runtime logs
+*.log
+
+# Packaged artifacts
+*.xpi
+*.crx
+
+# Browser-generated metadata
+chrome/_metadata/
+edge/_metadata/
+
+# Local machine/network endpoint configs
+hwt-protocol/hwt-urls.json
+hwt-protocol/hwt_urls_host.json

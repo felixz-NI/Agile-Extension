@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>HWT protocol test</title>
+  <style>
+    body { font-family: "Segoe UI", sans-serif; margin: 40px; }
+    button { font-size: 14px; padding: 8px 16px; cursor: pointer; }
+    p { color: #555; max-width: 560px; line-height: 1.4; }
+    code { background: #f0f0f0; padding: 1px 4px; border-radius: 3px; }
+  </style>
+</head>
+<body>
+  <h1>HWT Config Creator &mdash; protocol test</h1>
+  <p>
+    Click the button below. If the <code>hwt://</code> protocol is registered,
+    Windows runs <code>hwt-launch.ps1</code>, which starts the local HWT Config
+    Creator server (port 8501) if it isn't already running. Give it a few
+    seconds, then open
+    <a href="http://localhost:8501/mfg-debug-config-create" target="_blank">http://localhost:8501/mfg-debug-config-create</a>.
+  </p>
+  <p>Check <code>hwt-launch.log</code> in this folder to see what happened.</p>
+  <button type="button" onclick="window.location.href='hwt://start'">Start HWT server (hwt://start)</button>
+</body>
+</html>

@@ -1521,16 +1521,39 @@
     }
     // The page function + parsed arg list to invoke. onclickForTrigger handles
     // synthesized openFile(...) calls for viewFile/CAD links (via __previewOnclick).
+    //
+    // parseOpenFileParams returns EVERY argument as a string, but openFile's
+    // trailing flags are real booleans (..., ' ', false, false, false). Sending
+    // the string "false" (which is truthy) makes the MAIN-world openFile build a
+    // different request than the page's own onclick would, which Agile rejects
+    // with "Application Error" for some attachments (notably ECO affected-item
+    // files). coerceCallArgs restores the JS literal types so the call matches.
+    function coerceCallArgs(args) {
+        return args.map(function (v) {
+            if (v === 'true') return true;
+            if (v === 'false') return false;
+            if (v === 'null') return null;
+            return v;
+        });
+    }
     function getOpenFileCall(link) {
         const onclickStr = onclickForTrigger(link) || '';
         const parsed = parseOpenFileParams(onclickStr);
-        return { fn: 'openFile', args: parsed ? parsed.args : [] };
+        return { fn: 'openFile', args: parsed ? coerceCallArgs(parsed.args) : [] };
     }
     // Normal download — invoke the page's openFile in the MAIN world, no capture.
     function triggerDownload(link) {
         try {
             const call = getOpenFileCall(link);
-            sendPageCmd({ cmd: 'invoke', fn: call.fn, args: call.args });
+            // For a real attachment anchor, click the original DOM node in the
+            // MAIN world so the page's NATIVE onclick runs with correct argument
+            // types. Reconstructed args lose JS types (e.g. the trailing booleans
+            // arrive as the string "false", which is truthy) and Agile then
+            // answers "Application Error". Only synthesized viewFile/CAD links
+            // (__previewOnclick) must use fn+args, since clicking the anchor
+            // would launch the original viewFile (AutoVue) instead.
+            const linkAttrValue = link.__previewOnclick ? null : ensureBridgeId(link);
+            sendPageCmd({ cmd: 'invoke', fn: call.fn, args: call.args, linkAttrValue });
         } catch (err) { log('Download trigger error:', err); }
     }
 
@@ -1548,7 +1571,12 @@
             document.addEventListener('__pp_result', handler);
             try {
                 const call = getOpenFileCall(link);
-                sendPageCmd({ cmd: 'capture', id: captureId, fn: call.fn, args: call.args });
+                // Click the real anchor for normal attachments so the page's
+                // native onclick runs with correct argument types (see
+                // triggerDownload). Synthesized viewFile/CAD links must use
+                // fn+args because their anchor would run the original viewFile.
+                const linkAttrValue = link.__previewOnclick ? null : ensureBridgeId(link);
+                sendPageCmd({ cmd: 'capture', id: captureId, fn: call.fn, args: call.args, linkAttrValue });
             } catch (err) {
                 log('Error triggering capture:', err);
                 document.removeEventListener('__pp_result', handler);
@@ -4963,6 +4991,10 @@
                     e.preventDefault();
                     e.stopPropagation();
                     if (menu.classList.contains('open')) { closeHwtMenu(); return; }
+                    // Kick off the local hwt-config-creator server in the
+                    // background the moment the HWT button is pressed so it's
+                    // already warming up by the time a menu option is chosen.
+                    launchHWTServer();
                     buildMenu();
                     document.body.appendChild(menu);
                     positionMenu();
