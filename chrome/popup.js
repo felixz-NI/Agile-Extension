@@ -17,9 +17,11 @@
     { key: 'showMvdb',      name: 'MVDB',        desc: 'Open part in MVDB' },
     { key: 'showBlueNITE',  name: 'BlueNITE',    desc: 'Search part in BlueNITE' },
     { key: 'showAzure',     name: 'Azure',       desc: 'Search part in Azure DevOps' },
+    { key: 'showHWT',       name: 'HWT',         desc: 'Open part in HWT Config Creator' },
     { key: 'showP4v',       name: 'p4v',         desc: 'Open Perforce path in P4V' },
     { key: 'showP4Browser', name: 'P4 Browser',  desc: 'Open Perforce path in browser' },
-    { key: 'showFireman',   name: 'Fireman Manual', desc: 'Open the reference PDF' }
+    { key: 'showFireman',   name: 'Fireman Manual', desc: 'Open the reference PDF' },
+    { key: 'showTree',      name: 'Part Tree',   desc: 'Show the BOM / Where-Used tree' }
   ];
 
   const STORAGE_KEY = 'previewButtonSettings';
